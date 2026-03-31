@@ -22,16 +22,14 @@ export function Header({ phoneTel, ctaLabel, siteName, services }: Props) {
         <Link href="/" className="navbar-logo" aria-label={`${siteName} home`}>
           <span className="navbar-logo-icon" aria-hidden>
             <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2">
-              <rect x="2" y="3" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round"/>
-              <rect x="2" y="10" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round"/>
-              <rect x="2" y="17" width="20" height="4" rx="1" strokeLinecap="round" strokeLinejoin="round"/>
+              <path d="M3 9h18M3 9c0-3 2-5 5-5h8c3 0 5 2 5 5M7 9v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V9" strokeLinecap="round" strokeLinejoin="round"/>
             </svg>
           </span>
           <span className="navbar-logo-text">{siteName}</span>
         </Link>
         <div className="navbar-right">
           <div className="navbar-dropdown" ref={dropdownRef}>
-            <button type="button" className="navbar-link navbar-dropdown-trigger" aria-haspopup="true" aria-expanded={dropdownOpen} onClick={() => setDropdownOpen((o) => !o)}>Services \u25be</button>
+            <button type="button" className="navbar-link navbar-dropdown-trigger" aria-haspopup="true" aria-expanded={dropdownOpen} onClick={() => setDropdownOpen((o) => !o)}>Services &#9662;</button>
             {dropdownOpen && (
               <div className="navbar-dropdown-menu" role="menu">
                 {services.map(({ slug, label }) => (
@@ -53,7 +51,7 @@ export function Header({ phoneTel, ctaLabel, siteName, services }: Props) {
         <p className="navbar-drawer-title">Services</p>
         <div className="navbar-drawer-links">
           {services.map(({ slug, label }) => (
-            <Link key={slug} href={`/${slug}`} className="navbar-drawer-link" onClick={closeDrawer}>{label} \u2192</Link>
+            <Link key={slug} href={`/${slug}`} className="navbar-drawer-link" onClick={closeDrawer}>{label} &#8594;</Link>
           ))}
         </div>
         <div className="navbar-drawer-cta"><a href={phoneTel} className="navbar-cta" onClick={closeDrawer}>{ctaLabel}</a></div>
