@@ -1,0 +1,20 @@
+export const flooringConfig = {
+  name: "Flooring",
+  namePlural: "Flooring Contractors",
+  slug: "flooring",
+  siteUrl: "https://usa-flooring-quote.com",
+  siteName: "USA Flooring Quote",
+  phoneTel: "tel:+18335675853",
+  phoneDisplay: "(833) 567-5853",
+  ga4Id: "",
+  services: [
+    { slug: "flooring-quote",            label: "Flooring Quote" },
+    { slug: "hardwood-flooring-quote",   label: "Hardwood Flooring Quote" },
+    { slug: "laminate-flooring-quote",   label: "Laminate Flooring Quote" },
+    { slug: "tile-flooring-quote",       label: "Tile Flooring Quote" },
+    { slug: "carpet-installation-quote", label: "Carpet Installation Quote" },
+    { slug: "vinyl-flooring-quote",      label: "Vinyl Flooring Quote" },
+    { slug: "floor-refinishing-quote",   label: "Floor Refinishing Quote" },
+    { slug: "floor-removal-quote",       label: "Floor Removal Quote" },
+  ],
+} as const;

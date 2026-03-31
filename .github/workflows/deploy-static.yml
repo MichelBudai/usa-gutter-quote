@@ -1,0 +1,26 @@
+name: Deploy flooring static site
+on:
+  push:
+    branches:
+      - main
+  workflow_dispatch: {}
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+      - run: npm ci
+      - run: npx next build
+        env:
+          SITE_SLUG: flooring
+      - name: Deploy to VPS
+        env:
+          VPS_PASSWORD: ${{ secrets.VPS_PASSWORD }}
+        run: |
+          sudo apt-get install -y sshpass
+          sshpass -p "${VPS_PASSWORD}" rsync -az --delete -e "ssh -o StrictHostKeyChecking=no" ./out/ root@187.124.147.244:/var/www/flooring-static/
+          sshpass -p "${VPS_PASSWORD}" ssh -o StrictHostKeyChecking=no root@187.124.147.244 "nginx -t && systemctl reload nginx"
