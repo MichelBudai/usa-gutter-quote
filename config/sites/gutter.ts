@@ -2,21 +2,19 @@ export const gutterConfig = {
   name: "Gutter Specialist",
   namePlural: "Gutter Specialists",
   slug: "gutter",
-
   siteUrl: "https://usa-gutter-quote.com",
   siteName: "USA Gutter Quote",
-
-  phoneTel: "tel:+18442130383",
-  phoneDisplay: "(844) 213-0383",
-
-  ga4Id: "G-ZCV2C6T5TW",
-
+  phoneTel: "tel:+18553564443",
+  phoneDisplay: "(855) 356-4443",
+  ga4Id: "G-FR9YV912ZP",
   services: [
-    { slug: "pest-control-quote",        label: "Gutter Quote" },
-    { slug: "termite-treatment-quote",   label: "Termite Treatment Quote" },
-    { slug: "rodent-control-quote",      label: "Rodent Control Quote" },
-    { slug: "bed-bug-treatment-quote",   label: "Bed Bug Treatment Quote" },
-    { slug: "mosquito-control-quote",    label: "Mosquito Control Quote" },
-    { slug: "wildlife-removal-quote",    label: "Wildlife Removal Quote" },
+    { slug: "gutter-installation", label: "Gutter Installation" },
+    { slug: "gutter-cleaning", label: "Gutter Cleaning" },
+    { slug: "gutter-repair", label: "Gutter Repair" },
+    { slug: "gutter-replacement", label: "Gutter Replacement" },
+    { slug: "gutter-guard-installation", label: "Gutter Guard Installation" },
+    { slug: "downspout-repair", label: "Downspout Repair" },
+    { slug: "seamless-gutter", label: "Seamless Gutter" },
+    { slug: "gutter-inspection", label: "Gutter Inspection" },
   ],
 } as const;
