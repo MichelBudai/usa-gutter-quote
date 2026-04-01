@@ -2,12 +2,12 @@
  * Dynamic state page content — loads the right content based on current site.
  */
 import { getCurrentSiteConfig } from "./getSiteConfig";
-import { getStatePageContent as getNicheStatePageContent, type StatePageContent } from "./statePageContentFlooring";
+import { getStatePageContent as getNicheStatePageContent, type StatePageContent } from "./statePageContentGutter";
 
 export type { StatePageContent };
 
 const CONTENT_BY_NICHE: Record<string, typeof getNicheStatePageContent> = {
-  "flooring": getNicheStatePageContent,
+  "gutter": getNicheStatePageContent,
 };
 
 export function getStatePageContent(

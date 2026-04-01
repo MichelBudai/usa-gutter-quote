@@ -1,5 +1,4 @@
 import type { ServiceSlug } from "./data";
-import { getCurrentSiteConfig } from "./getSiteConfig";
 import stateMetadataJson from "../data/state_metadata.json";
 
 interface StateMetadata {
@@ -53,174 +52,180 @@ export interface StatePageContent {
 }
 
 const SERVICE_STATE_DESCRIPTIONS: Record<
-  ServiceSlug,
+  string,
   { description: string; costRange: string }
 > = {
-  "pest-control-quote": {
+  "gutter-installation": {
     description:
-      "From one-time treatments to annual prevention programs, gutter costs vary by pest type, home size, and infestation severity. Connect with a licensed specialist in your city for an accurate estimate.",
-    costRange: "Varies by job — get a free quote",
+      "New gutter installation protects your home's foundation, siding, and landscaping from water damage. Cost depends on linear footage, gutter material (aluminum, steel, copper), style (K-style vs half-round), and labor rates in your area. A licensed installer measures your roofline and provides an itemized quote before any work begins.",
+    costRange: "$600 – $2,400",
   },
-  "termite-treatment-quote": {
+  "gutter-cleaning": {
     description:
-      "Termite damage is not covered by most homeowner insurance policies. Treatment method — liquid barrier, bait system, or fumigation — depends on species and infestation severity. Early treatment protects your home's structural integrity.",
-    costRange: "$500 – $8,000+",
+      "Clogged gutters cause water to back up under shingles, saturate fascia boards, and pool around foundations. Professional cleaning includes flushing downspouts and a system inspection. Most homes need cleaning once or twice per year depending on tree coverage.",
+    costRange: "$100 – $250",
   },
-  "rodent-control-quote": {
+  "gutter-repair": {
     description:
-      "Effective rodent control requires complete exclusion — sealing every entry point — not just trapping. Attic sanitization is often needed after an infestation. A licensed specialist provides a full exclusion quote.",
-    costRange: "$300 – $2,500+",
+      "Leaking seams, sagging sections, and separated hangers allow water to drain against your home instead of away from it. Repair costs depend on the number of problem areas, gutter material, and roof access difficulty. A specialist diagnoses the full system before quoting.",
+    costRange: "$150 – $600",
   },
-  "bed-bug-treatment-quote": {
+  "gutter-replacement": {
     description:
-      "Bed bug infestations require professional treatment — DIY approaches almost always fail and scatter the infestation. Heat treatment eliminates all bugs and eggs in one visit; chemical treatment requires multiple visits.",
-    costRange: "$500 – $5,000+",
+      "Gutters older than 20 years often have widespread joint failures, rust, and improper pitch that can't be fully corrected by repair. Full replacement with seamless aluminum eliminates most leak points. Cost depends on linear footage, home height, and material choice.",
+    costRange: "$800 – $3,000+",
   },
-  "mosquito-control-quote": {
+  "gutter-guard-installation": {
     description:
-      "Professional mosquito control reduces biting pressure by 70–90% with a consistent seasonal program. Barrier spray, seasonal programs, and automated misting systems are available based on property size and budget.",
-    costRange: "$300 – $900 per season",
+      "Gutter guards reduce cleaning frequency by 80–90% and prevent clogs from leaves, pine needles, and debris. Guard type — micro-mesh, reverse curve, foam insert — affects price and performance. A specialist recommends the right product for your tree coverage and gutter style.",
+    costRange: "$500 – $2,500",
   },
-  "wildlife-removal-quote": {
+  "downspout-repair": {
     description:
-      "Wildlife removal is legally regulated in most states — always use a licensed specialist. Removal without exclusion guarantees re-entry. A licensed specialist handles permits, humane removal, and complete exclusion.",
-    costRange: "$200 – $3,000+",
+      "Damaged or disconnected downspouts deposit water directly against your foundation. Repair or rerouting ensures water discharges at least 4 feet from the home. A specialist assesses downspout size, slope, and discharge point before quoting.",
+    costRange: "$75 – $400",
+  },
+  "seamless-gutter": {
+    description:
+      "Seamless gutters are fabricated on-site from a continuous coil, eliminating seam joints — the most common leak point. Available in aluminum, steel, and copper. A specialist measures and rolls your gutters to exact length during the installation visit.",
+    costRange: "$700 – $2,800",
+  },
+  "gutter-inspection": {
+    description:
+      "A full gutter inspection identifies hidden damage, improper pitch, undersized downspouts, and failing fascia before problems escalate. Many specialists offer free inspections when combined with cleaning or a repair estimate.",
+    costRange: "Free – $150",
   },
 };
 
-const PEST_CONTROL_LABELS: Record<string, string> = {
-  "pest-control-quote": "Gutter Quote",
-  "termite-treatment-quote": "Termite Treatment Quote",
-  "rodent-control-quote": "Rodent Control Quote",
-  "bed-bug-treatment-quote": "Bed Bug Treatment Quote",
-  "mosquito-control-quote": "Mosquito Control Quote",
-  "wildlife-removal-quote": "Wildlife Removal Quote",
+const GUTTER_LABELS: Record<string, string> = {
+  "gutter-installation": "Gutter Installation",
+  "gutter-cleaning": "Gutter Cleaning",
+  "gutter-repair": "Gutter Repair",
+  "gutter-replacement": "Gutter Replacement",
+  "gutter-guard-installation": "Gutter Guard Installation",
+  "downspout-repair": "Downspout Repair",
+  "seamless-gutter": "Seamless Gutter",
+  "gutter-inspection": "Gutter Inspection",
 };
 
 export function getStatePageContent(
-  serviceSlug: ServiceSlug,
+  serviceSlug: string,
   serviceLabel: string,
   stateName: string,
   stateAbbr: string,
   stateSlug: string
 ): StatePageContent {
-  const serviceLower = serviceLabel.toLowerCase();
-  const serviceClean = serviceLower.replace(/\s*quote\s*$/i, "").trim();
-  const stateMeta = stateMetadataMap[stateSlug] ?? null;
-  const topCityNames = stateMeta?.topCities.slice(0, 3).map((c) => c.name).join(", ") ?? "";
+  const meta = stateMetadataMap[stateSlug] ?? null;
+  const pctPre1980 = meta?.pctPre1980 ?? null;
+  const avgHomeownership = meta?.avgHomeownership ?? null;
+  const topCities = meta?.topCities?.slice(0, 3).map((c) => c.name) ?? [];
+  const cityCount = meta?.cityCount ?? null;
+  const svc = SERVICE_STATE_DESCRIPTIONS[serviceSlug] ?? SERVICE_STATE_DESCRIPTIONS["gutter-installation"];
+  const label = GUTTER_LABELS[serviceSlug] ?? serviceLabel;
+
+  const introParagraphs: string[] = [
+    `Get a free ${label.toLowerCase()} quote in ${stateName}. Licensed local specialists serve every major city and county — upfront pricing, no obligation.`,
+  ];
+  if (pctPre1980 !== null && pctPre1980 > 30) {
+    introParagraphs.push(
+      `${Math.round(pctPre1980)}% of homes in ${stateName} were built before 1980. Older gutters often have galvanized steel that rusts, failing sealant at seam joints, and undersized downspouts that can't handle modern rainfall volumes. A specialist familiar with ${stateName}'s housing stock can assess what your system actually needs.`
+    );
+  }
+  if (avgHomeownership !== null && avgHomeownership > 60) {
+    introParagraphs.push(
+      `With a homeownership rate near ${Math.round(avgHomeownership)}% across ${stateName}, protecting your home's value through proper water management is a sound investment. A functioning gutter system prevents foundation damage, siding rot, and basement flooding — issues that cost far more to fix than preventive maintenance.`
+    );
+  }
 
   return {
-    metaTitle: `${serviceLabel} in ${stateName} | Free Quotes by City`,
-    metaDescription: `Get free ${serviceClean} quotes from licensed ${getCurrentSiteConfig().namePlural.toLowerCase()} in ${stateName}. Compare estimates by city. No obligation. Licensed & insured.`,
-
-    heroTitle: `Free ${serviceLabel} in ${stateName}`,
-    heroSub: `Connect with licensed ${stateName} ${getCurrentSiteConfig().namePlural.toLowerCase()} in your city — get a free, no-obligation estimate for any pest, termite, rodent, or wildlife issue.`,
-
+    metaTitle: `${label} in ${stateName} | Free Quotes from Licensed Local Specialists`,
+    metaDescription: `Free ${label.toLowerCase()} quotes in ${stateName}. Licensed local gutter specialists${cityCount ? ` in ${cityCount}+ cities` : ""}. Upfront pricing, no obligation.`,
+    heroTitle: `Free ${label} Quote in ${stateName}`,
+    heroSub: `Licensed ${stateName} gutter specialists for ${label.toLowerCase()} and all gutter services. Free estimates, no obligation.`,
     trustBullets: [
-      `Licensed & insured ${stateAbbr} ${getCurrentSiteConfig().namePlural.toLowerCase()}`,
-      "Free quotes, zero commitment",
-      `Same-day service in most ${stateName} cities`,
-      "Upfront pricing before any work starts",
+      `Licensed & insured in ${stateName}`,
+      "Free estimates, no obligation",
+      "Upfront pricing before work begins",
+      "Same-day availability in most areas",
+      ...(cityCount ? [`Service in ${cityCount}+ cities across ${stateName}`] : []),
     ],
-
     intro: {
-      h2: `Get an Honest ${serviceLabel} from a${/^[AEIOU]/i.test(stateName) ? "n" : ""} ${stateName}-Licensed Specialist`,
-      paragraphs: [
-        `Pest control costs in ${stateName} vary more than most homeowners expect. Treatment methods, infestation severity, and local regulations all shift by city and county. The only quote that actually matters is one from a specialist who knows your area.`,
-        ...(stateMeta?.pctPre1980
-          ? [`${stateMeta.pctPre1980}% of ${stateName} cities have a median home build year before 1980 — meaning a large share of the housing stock has aging foundations, gaps, and wood framing that increase pest risk. Getting a quote before an infestation compounds is significantly cheaper than emergency treatment.`]
-          : []),
-        ...(stateMeta?.avgHomeownership
-          ? [`With an average homeownership rate of ${stateMeta.avgHomeownership}% across ${stateName}, most residents have a direct financial stake in protecting their home from pest damage. A free quote takes less than 5 minutes and gives you a real number before spending anything.`]
-          : []),
-        `Select your ${stateName} city below and connect with a licensed local specialist who can give you an accurate, no-obligation estimate — whether it's a termite treatment, rodent exclusion, bed bug heat treatment, or wildlife removal.`,
-      ],
-      ctaText: "Select Your City Below",
+      h2: `${label} Quotes in ${stateName}`,
+      paragraphs: introParagraphs,
+      ctaText: `Get a Free ${label} Quote in ${stateName}`,
     },
-
     why: {
       h2: `Why ${stateName} Homeowners Get a Gutter Quote First`,
       points: [
         {
-          h3: `${stateName} Gutter Regulations Vary by County`,
-          text: `Pest control licensing, treatment regulations, and wildlife removal permits differ by county in ${stateName}. A licensed ${stateName} specialist familiar with your city handles all regulatory requirements and factors permit costs into your quote upfront — no surprises on the invoice.`,
+          h3: "Know your cost before any commitment",
+          text: `${label} costs in ${stateName} vary by home size, linear footage, material, and local labor rates. A free phone quote from a licensed ${stateName} specialist gives you a realistic number before you schedule anything.`,
         },
         {
-          h3: "Older Homes Have More Entry Points",
-          text: `${stateMeta?.pctPre1980 ? `${stateMeta.pctPre1980}% of cities in ${stateName} have a median build year before 1980.` : `A significant share of homes in ${stateName} were built before 1980.`} Older homes have aging foundations, deteriorated soffits, and pipe penetrations that are common pest entry points. Getting a quote before an infestation grows is the difference between a targeted treatment and a full remediation — which costs two to three times more.`,
+          h3: "Prevent costly water damage",
+          text: `Failing gutters allow water to pool against foundations, saturate fascia boards, and erode landscaping. Addressing the issue early prevents repair costs that routinely exceed $5,000–$15,000 in foundation and basement remediation.`,
         },
         {
-          h3: `${stateName} Pest Pressure Varies by Region`,
-          text: `Pest species, termite pressure, mosquito season length, and wildlife activity are not consistent across ${stateName}. A quote from a specialist in your specific ${stateName} city reflects local pest pressure and seasonal timing — not a state or national average that may not apply to your situation.`,
+          h3: `Licensed ${stateName} specialists only`,
+          text: `All specialists connected through this page are licensed and insured under ${stateName} state requirements. You get honest quotes from contractors accountable to state licensing boards.`,
         },
       ],
     },
-
     services: {
-      h2: "Gutter Services Available for Quotes Across " + stateName,
-      intro: "Select your city to get a local quote on any of the services below.",
-      items: (
-        [
-          "pest-control-quote",
-          "termite-treatment-quote",
-          "rodent-control-quote",
-          "bed-bug-treatment-quote",
-          "mosquito-control-quote",
-          "wildlife-removal-quote",
-        ] as ServiceSlug[]
-      ).map((slug) => {
-        const { description, costRange } = SERVICE_STATE_DESCRIPTIONS[slug];
-        const title = `${PEST_CONTROL_LABELS[slug] ?? slug} — ${stateName}`;
-        return { slug, title, description, costRange };
-      }),
+      h2: `Gutter Services in ${stateName}`,
+      intro: `Licensed ${stateName} specialists handle all gutter needs — from routine cleaning to full seamless replacement. Select a service to see pricing and local availability.`,
+      items: Object.entries(SERVICE_STATE_DESCRIPTIONS).map(([slug, data]) => ({
+        slug: slug as ServiceSlug,
+        title: GUTTER_LABELS[slug] ?? slug,
+        description: data.description,
+        costRange: data.costRange,
+      })),
     },
-
     cityIntro: {
-      h2: `Find a ${serviceLabel} in Your ${stateName} City`,
-      paragraph: `${stateName} ${getCurrentSiteConfig().namePlural.toLowerCase()} are available for free quotes in ${stateMeta?.cityCount ?? "hundreds of"} cities statewide${topCityNames ? `, including ${topCityNames}` : ""}. Select your city below to get an estimate specific to your area.`,
-      ctaText: "Select Your City",
+      h2: `${label} Near You in ${stateName}`,
+      paragraph: topCities.length
+        ? `Licensed gutter specialists serve ${stateName} statewide, including ${topCities.join(", ")}, and ${cityCount ? cityCount + " other cities" : "all major cities"} across the state.`
+        : `Licensed gutter specialists serve all major cities across ${stateName}.`,
+      ctaText: `Find a ${label} Specialist Near You`,
     },
-
     faq: {
-      h2: `${stateName} Gutter Quote FAQ`,
+      h2: `${label} FAQ — ${stateName}`,
       items: [
         {
-          q: `How much does gutter cost in ${stateName}?`,
-          a: `Pest control costs in ${stateName} vary widely by service. A one-time general treatment runs $150–$400; annual prevention programs run $400–$900 per year. Termite treatment ranges from $500 to $8,000+ depending on method; rodent exclusion runs $300–$2,500+. Select your city for a local estimate.`,
+          q: `How much does ${label.toLowerCase()} cost in ${stateName}?`,
+          a: `${svc.costRange} is a typical range in ${stateName}. ${svc.description} A free phone quote from a licensed specialist gives you a project-specific number.`,
         },
         {
-          q: `Do ${getCurrentSiteConfig().namePlural.toLowerCase()} need a license in ${stateName}?`,
-          a: `Yes. ${stateName} requires gutter applicators to be licensed by the state. Wildlife removal specialists require separate wildlife control permits for most species. Always verify licensing before hiring — all specialists connected through this page are licensed and insured.`,
+          q: `Is the ${label.toLowerCase()} quote free in ${stateName}?`,
+          a: `Yes. A phone quote costs nothing. You get a real estimate from a licensed ${stateName} gutter specialist before any work or inspection fee is required.`,
         },
         {
-          q: `How do I find a licensed ${getCurrentSiteConfig().name.toLowerCase()} in ${stateName}?`,
-          a: `Select your city on this page to connect with licensed, insured specialists who operate in your area and are familiar with local pest species and regulations.`,
+          q: `How do I know if I need ${label.toLowerCase()} or a full replacement?`,
+          a: `A licensed gutter specialist can assess this over the phone and confirm during a free on-site inspection. Gutters under 15 years old with isolated issues usually qualify for repair; older systems with widespread joint failures or rust typically warrant replacement.`,
         },
         {
-          q: `What pest problems are most common in ${stateName} homes?`,
-          a: `Common issues vary by region but typically include termites, rodents (mice and rats), bed bugs, mosquitoes, and wildlife intrusions (raccoons, squirrels, bats). Older homes are particularly vulnerable to termite damage and rodent entry. Getting a quote first helps you plan and avoid overpaying.`,
+          q: `Do gutter contractors need a license in ${stateName}?`,
+          a: `${stateName} requires contractors performing exterior improvements to carry a valid contractor's license and general liability insurance. All specialists connected through this page meet ${stateName} state requirements.`,
         },
         {
-          q: `Can I get a same-day gutter quote in ${stateName}?`,
-          a: `In most ${stateName} cities, same-day phone quotes and same-day or next-day service are available for most gutter services. Select your city to check availability in your area.`,
+          q: `How often should gutters be cleaned in ${stateName}?`,
+          a: `Most ${stateName} homes with significant tree coverage need cleaning twice per year — fall after leaf drop and spring after seed pods. Homes with minimal tree coverage may only need annual cleaning. A specialist can assess your specific situation.`,
         },
         {
-          q: `Does homeowner insurance cover pest damage in ${stateName}?`,
-          a: `Most standard homeowner insurance policies in ${stateName} do not cover termite damage, rodent damage, or wildlife intrusion damage — these are considered preventable maintenance issues. Early treatment is the most cost-effective protection.`,
+          q: `Can I get same-day gutter service in ${stateName}?`,
+          a: `Same-day availability depends on the service type and season. Gutter cleaning and minor repairs are often available same-day or next-day. New installation and full replacement typically require scheduling 3–7 business days out. Call to confirm availability in your area.`,
         },
       ],
     },
-
     closing: {
-      h2: `Ready to Find a Gutter Specialist in Your ${stateName} City?`,
-      text: `Homeowners across ${stateName} get gutter quotes through this page every day. It takes less than a minute — select your city, connect with a licensed local specialist, and get an honest estimate before spending a dollar. No forms. No wait. No obligation.`,
-      ctaText: `Select Your ${stateName} City`,
+      h2: `Get Your Free ${label} Quote in ${stateName} Today`,
+      text: `No forms. No waiting. No obligation. A licensed gutter specialist serving ${stateName} can give you an honest estimate in under 5 minutes.`,
+      ctaText: `Call for a Free ${label} Quote in ${stateName}`,
     },
-
     internalLinks: {
-      otherStatesLabel: "Other gutter quote states",
-      viewAllStatesLabel: "View All States",
-      otherServicesLabel: `Other services in ${stateName}`,
+      otherStatesLabel: "Gutter services in other states:",
+      viewAllStatesLabel: "View all states",
+      otherServicesLabel: "Other gutter services:",
     },
   };
 }
