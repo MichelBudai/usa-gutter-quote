@@ -4,19 +4,19 @@ import type { ServiceCityContent } from "./cityServiceContentGutter";
 const PHONE_DEFAULT = "(555) 123-4567";
 
 const EEAT_BULLETS = [
-  "This guide is written for homeowners comparing local gutter quotes — we focus on what actually affects your estimate.",
-  "We don't charge gutter specialists for placement. The quotes you get are from licensed contractors, not pay-to-play leads.",
-  "Cost ranges are based on typical project scope in your region; your final quote depends on your home's linear footage, material, and local labor rates.",
+  "This guide is written for homeowners comparing local gutter quotes — we focus on what actually affects your estimate, not what sounds impressive.",
+  "We don't charge gutter specialists for placement or prioritize them by fee. Every contractor connected through this page is licensed and insured in your state.",
+  "Cost ranges reflect real installed prices for your region — not national averages or manufacturer retail pricing. Your exact quote depends on your home's linear footage, material, and roof access.",
 ];
 
 function buildTrustBullets(stateAbbr: string, cityName: string, county?: string): string[] {
   const bullets = [
-    `Licensed & insured in ${stateAbbr}`,
-    "Free estimates, no obligation",
+    `Licensed & insured gutter contractors in ${stateAbbr}`,
+    "Free estimates — no inspection fee, no obligation",
     `Same-day availability in ${cityName}`,
     "Upfront pricing before any work begins",
   ];
-  if (county) bullets.push(`Serving ${cityName} and ${county}`);
+  if (county) bullets.push(`Serving ${cityName} and ${county} County`);
   return bullets;
 }
 
@@ -32,16 +32,16 @@ function buildLocalSignalsBullets(
   const medianYear = cityMetadata?.medianYearBuilt;
   const growthSnippet = cityMetadata?.growthSnippet;
   if (county) {
-    bullets.unshift(`Serving ${cityName} and ${county} — licensed under ${stateName} state requirements.`);
+    bullets.unshift(`Serving ${cityName} and ${county} County — licensed under ${stateName} state contractor requirements.`);
   }
   if (medianYear) {
     bullets.push(
-      `Many ${cityName} homes were built in the ${medianYear} era — gutters on older homes commonly have failing seam joints and undersized downspouts that need attention.`
+      `Many ${cityName} homes were built around ${medianYear} — gutters on homes of this age commonly have failing seam sealant, corroded hangers, and undersized downspouts that need evaluation.`
     );
   }
   if (growthSnippet) {
     bullets.push(
-      `${cityName} is ${growthSnippet}, so licensed gutter specialists are in high demand — getting a quote early helps secure a slot.`
+      `${cityName} is ${growthSnippet} — licensed gutter contractors are in high demand, so booking a quote early secures your installation or service window.`
     );
   }
   return bullets;
@@ -63,132 +63,145 @@ export function getGutterCityPageContent(
   const growthSnippet = cityMetadata?.growthSnippet;
   const homeownershipRate = cityMetadata?.homeownershipRate;
 
-  const introParagraphs: string[] = [];
-  introParagraphs.push(
-    `Get a free gutter installation quote in ${cityName}, ${stateName}. This page connects you with licensed local specialists for all gutter services — installation, cleaning, repair, replacement, guards, and more. Free estimates, no obligation.`
-  );
-  if (county || growthSnippet) {
+  const introParagraphs: string[] = [
+    `Get a free gutter installation quote in ${cityName}, ${stateName}. Licensed local specialists measure your roofline, recommend the right material and size for your home and local rainfall, and provide a line-item quote — no forms, no inspection fee, no obligation.`,
+  ];
+  if (county && growthSnippet) {
     introParagraphs.push(
-      county && growthSnippet
-        ? `${cityName} is ${growthSnippet}. Gutter specialists in ${county} are familiar with local rainfall patterns, roof styles, and the drainage requirements of your area.`
-        : county
-          ? `In ${county}, licensed gutter specialists work the area regularly and know local drainage conditions, typical roof pitches, and material preferences. A phone quote takes under 5 minutes.`
-          : `${cityName} is ${growthSnippet}. Get a real gutter estimate from a licensed specialist who serves your area.`
+      `${cityName} is ${growthSnippet}. Gutter specialists in ${county} County know local drainage requirements, typical roof pitches, and the material preferences of ${cityName} homeowners — a phone quote takes under 5 minutes and gives you a real number before you commit to anything.`
+    );
+  } else if (county) {
+    introParagraphs.push(
+      `In ${county} County, licensed gutter contractors work ${cityName} properties regularly and know the local drainage codes, seasonal debris patterns, and housing stock characteristics that affect your quote. A 5-minute call gets you a project-specific estimate.`
+    );
+  } else if (growthSnippet) {
+    introParagraphs.push(
+      `${cityName} is ${growthSnippet}. A licensed local gutter specialist who knows the area can give you an honest installation estimate over the phone — sized correctly for your roofline and local rainfall conditions.`
     );
   } else {
     introParagraphs.push(
-      `A licensed gutter specialist who serves ${cityName} can assess your home's drainage needs and give you an honest estimate over the phone in under 5 minutes.`
+      `A licensed ${cityName} gutter specialist assesses your home's drainage needs, recommends the right gutter size and material, and gives you a written quote — before any work is scheduled or any fee is charged.`
     );
   }
 
-  const localParagraphs: string[] = [
-    ...(county
-      ? [`Gutter installation and repair in ${county} follows ${stateName} contractor licensing requirements. Local specialists know the drainage codes and inspection standards for your area.`]
-      : []),
-    ...(medianYear
-      ? [`With a median build year of ${medianYear}, many ${cityName} homes have original gutters that are well past their 20-year lifespan. Seam failures, rust, and improper pitch are common — a specialist can assess whether repair or replacement makes more financial sense.`]
-      : []),
-    ...(homeValue
-      ? [`With a median home value of $${Number(homeValue).toLocaleString()} in ${cityName}, a properly functioning gutter system protects a significant asset. Foundation damage from failed gutters can cost $5,000–$25,000+ to remediate.`]
-      : []),
-    ...(growthSnippet
-      ? [`As ${growthSnippet}, ${cityName}'s new construction and renovation activity keeps licensed gutter specialists busy. Booking a quote early ensures you get the installation window you need.`]
-      : []),
-  ].filter(Boolean);
+  const localParagraphs: string[] = [];
+  if (county) {
+    localParagraphs.push(
+      `Gutter installation in ${county} County is subject to ${stateName} contractor licensing requirements. Local specialists know the drainage grade standards and inspection expectations for ${cityName} properties — and carry the insurance your project requires.`
+    );
+  }
+  if (medianYear) {
+    localParagraphs.push(
+      `With a median build year of ${medianYear}, many ${cityName} homes have original gutter systems that are at or past their typical 20-year service life. Seam joint failures, corroded hangers, and 4-inch downspouts that can't handle heavy rain events are common findings on homes of this age. A licensed specialist assesses whether repair or seamless replacement is the more cost-effective path for your specific system.`
+    );
+  }
+  if (homeValue) {
+    localParagraphs.push(
+      `With a median home value of $${Number(homeValue).toLocaleString()} in ${cityName}, a properly functioning gutter system is direct protection for a significant asset. Foundation damage from failed gutters costs $5,000–$25,000+ to remediate — far more than the $600–$2,400 a full seamless installation costs upfront.`
+    );
+  }
+  if (growthSnippet) {
+    localParagraphs.push(
+      `As ${growthSnippet}, ${cityName}'s active construction and renovation market keeps licensed gutter contractors busy. Booking a quote early — especially for installation and full replacement — ensures you get the service window you need before the season peaks.`
+    );
+  }
   if (!localParagraphs.length) {
-    localParagraphs.push(`A licensed ${cityName} gutter specialist can give you a detailed quote for installation, repair, or replacement tailored to your home.`);
+    localParagraphs.push(
+      `A licensed ${cityName} gutter specialist gives you a detailed installation quote based on your home's actual measurements — not a per-foot estimate from a website. The difference matters: every roofline is different, and correct sizing and pitch are what determine how long your gutters last.`
+    );
   }
 
   return {
     meta: {
-      title: `Gutter Installation Quote in ${cityName}, ${stateAbbr} | Free Estimates from Licensed Local Specialists`,
-      description: `Free gutter installation quote in ${cityName}, ${stateName}. Licensed local specialists for installation, cleaning, repair, guards, and seamless gutters. Upfront pricing, no obligation.`,
+      title: `Gutter Installation in ${cityName}, ${stateAbbr} — $600–$2,400 | Free Quotes, Licensed Specialists`,
+      description: `Free gutter installation quote in ${cityName}, ${stateName}. Seamless aluminum $600–$2,400. Licensed local specialists for installation, cleaning, repair, guards, and replacement. Upfront pricing, no obligation.`,
     },
     hero: {
       h1: `Free Gutter Installation Quote in ${cityName}, ${stateName}`,
-      sub: `Licensed ${cityName} gutter specialists for installation, cleaning, repair, replacement, and guards. Honest estimates, no commitment.`,
+      sub: `Licensed ${cityName} gutter specialists for installation, cleaning, repair, replacement, and guards. Seamless aluminum from $600. Honest estimates, no commitment.`,
       trustBullets: buildTrustBullets(stateAbbr, cityName, county),
       cta: "Get Your Free Gutter Quote — Call Now",
     },
     intro: {
-      h2: `Get a Real Gutter Estimate in ${cityName}, ${stateName}`,
+      h2: `Gutter Installation in ${cityName}, ${stateName} — What It Costs and What to Ask`,
       paragraphs: introParagraphs,
-      cta: `Call for a Free ${cityName} Gutter Quote`,
+      cta: `Call for a Free ${cityName} Gutter Installation Quote`,
     },
     costEstimator: {
-      h2: `Gutter Cost Estimator — ${cityName}, ${stateName}`,
-      intro: `Use this tool for a ballpark before you call. Gutter installation costs in ${cityName} vary by linear footage, material, and home height — typically $600–$2,400 for a full system. Cleaning runs $100–$250; repair runs $150–$600; gutter guards run $500–$2,500. Your exact quote depends on your home's specific measurements and needs.`,
+      h2: `Gutter Installation Cost Estimator — ${cityName}, ${stateName}`,
+      intro: `Gutter installation costs in ${cityName} vary by linear footage, material, and home height. A single-story home with 150 linear feet of seamless aluminum typically runs $750–$1,350. A two-story home with 200+ feet and a complex roofline runs $1,400–$2,400+. Use this estimator to get a ballpark — then call for an exact quote based on your specific roofline measurements.`,
       ctaBelow: `Get Your Exact ${cityName} Gutter Quote — Call Now`,
     },
     mainService: {
       h2: `Gutter Installation Quote in ${cityName}, ${stateAbbr}`,
-      description: `Gutter installation costs in ${cityName} depend on your home's linear footage, the gutter material (aluminum, steel, copper), profile style (K-style or half-round), and roof height. A standard ranch home typically runs $600–$1,400; a two-story home with complex rooflines runs $1,200–$2,400 or more. Seamless gutters cost slightly more upfront but eliminate seam joints — the most common leak point — and typically last 20+ years. A licensed ${cityName} gutter specialist measures your roofline and provides a line-item quote before any work begins.`,
+      description: `Gutter installation in ${cityName} is priced by linear footage, material, gutter profile, and home height. Seamless aluminum — the most popular choice — runs $4–$9 per linear foot installed; seamless steel runs $6–$12; copper runs $15–$30. A standard single-story ranch home (120–160 linear feet) typically lands at $700–$1,400 in aluminum. A two-story home with a complex roofline and 200+ feet of gutter runs $1,400–$2,600+. The difference between a $700 and a $1,400 quote isn't just material — it's pitch precision, hanger spacing, and downspout sizing, all of which determine how long the system lasts. A licensed ${cityName} specialist measures your roofline, recommends the correct gutter size for your roof pitch and local rainfall, and provides a line-item quote before scheduling anything.`,
       localParagraphs,
-      cost: `${cityName} gutter installation: $600 – $2,400 for a full system`,
+      cost: `${cityName} gutter installation: $600 – $2,400 for a complete seamless system`,
       whatAffects: [
-        "Linear footage of gutters needed",
-        "Gutter material — aluminum, steel, vinyl, copper",
-        "Profile style — K-style (most common) vs half-round",
-        `Home height and roof access complexity`,
-        "Downspout count and routing",
+        "Total linear footage — measured along every eave that needs a gutter",
+        "Material — aluminum (most common), steel, copper",
+        "Profile and size — 5-inch vs 6-inch K-style, half-round",
+        "Home height — single vs two-story affects labor time and equipment needs",
+        "Downspout count, size, and discharge routing",
+        "Existing gutter removal if replacing an old system",
       ],
       cta: `Get a Gutter Installation Quote in ${cityName} — Call Now`,
     },
     whyCall: {
-      h2: `Why ${cityName} Homeowners Get a Gutter Quote First`,
+      h2: `Why ${cityName} Homeowners Call for a Gutter Quote Before Buying Materials`,
       paragraphs: [
-        `A phone quote from a licensed ${cityName} gutter specialist gives you a realistic installation budget before any work starts. Gutter costs${county ? ` in ${county}` : ""} vary significantly by home size, material, and roof complexity. A 5-minute call gets you a number — and a material recommendation — that reflects your specific home.`,
-        `It filters out the wrong contractors fast. Any ${cityName} specialist who won't give you a range over the phone before charging an inspection fee is worth avoiding. Reputable gutter contractors are used to giving ballpark estimates; a free quote call tells you immediately who's worth your time.`,
-        `Getting gutters repaired or replaced before water damage compounds saves money. Foundation damage, fascia rot, and basement moisture issues all become significantly more expensive the longer failing gutters go unaddressed. A functioning gutter system is one of the most cost-effective home maintenance investments available.`,
+        `A 5-minute call to a licensed ${cityName} gutter specialist gets you a real installation budget — sized correctly for your roofline, your roof pitch, and ${stateName}'s rainfall conditions. The right gutter size prevents overflow during heavy rain; the wrong size is just an expensive decoration that fails when you need it most.${county ? ` Specialists in ${county} County know the local drainage grade requirements and can confirm your system will pass inspection.` : ""}`,
+        `It keeps you from overpaying or getting under-delivered. The most common gutter mistake in ${cityName} is hiring a contractor who uses undersized 4-inch gutters or incorrectly spaced hangers to cut costs. A licensed specialist explains exactly what hanger spacing, gutter size, and downspout count your home needs — so you can hold any contractor to the same standard.`,
+        `Acting before a storm season starts saves money and guarantees availability. New gutters prevent the foundation oversaturation, fascia rot, and basement moisture that develop over multiple rain seasons without proper drainage. Waiting until visible damage forces the issue means paying for gutter installation AND the water damage repair — costs that stack quickly past $5,000.`,
       ],
     },
     localSignals: {
-      h2: `Gutter Service Areas Near ${cityName}, ${stateName}`,
-      intro: `Licensed gutter specialists available for quotes in ${cityName} and nearby communities including ${nearby1}, ${nearby2}, and ${nearby3}.`,
+      h2: `Gutter Installation Service Areas Near ${cityName}, ${stateName}`,
+      intro: `Licensed gutter installation specialists serve ${cityName} and nearby communities including ${nearby1}, ${nearby2}, and ${nearby3}.`,
       bullets: buildLocalSignalsBullets(
         stateName,
         stateAbbr,
         cityName,
         [
-          `All specialists are licensed under ${stateName} state requirements`,
-          `Familiar with ${cityName}-area rainfall patterns, roof styles, and local drainage codes`,
-          "Upfront pricing — no surprise fees after work begins",
-          `Same-day and next-day availability in ${cityName} and surrounding ${stateAbbr} areas`,
+          `All contractors are licensed and insured under ${stateName} state requirements`,
+          `Familiar with ${cityName}-area rainfall patterns, roof styles, and drainage codes`,
+          "Seamless gutters custom-rolled on-site to your exact roofline",
+          `Same-day and next-day quotes available in ${cityName}`,
         ],
         cityMetadata
       ),
     },
-    eeat: { title: "Why trust this guide", bullets: EEAT_BULLETS },
+    eeat: { title: "About this guide", bullets: EEAT_BULLETS },
     faq: {
       h2: `Gutter Installation FAQ — ${cityName}, ${stateName}`,
       items: [
         {
           q: `How much does gutter installation cost in ${cityName}, ${stateAbbr}?`,
-          a: `Gutter installation in ${cityName} typically runs $600–$2,400 for a full system depending on linear footage, material, and home height. Seamless aluminum is the most popular choice at $4–$9 per linear foot installed. A licensed ${cityName} specialist can give you a line-item quote based on your specific roofline.`,
-        },
-        {
-          q: `Is the gutter quote in ${cityName} free?`,
-          a: `Yes. A phone quote costs nothing. No obligation, no inspection fee. You get a real estimate from a licensed ${cityName} gutter specialist before any work begins.`,
-        },
-        {
-          q: `How long do gutters last in ${cityName}?`,
-          a: `Aluminum gutters typically last 20 years; galvanized steel lasts 20–25 years; copper lasts 50+ years. Seamless gutters last longer than sectional gutters because they have no seam joints to fail. ${medianYear ? `Many ${cityName} homes built around ${medianYear} are due for evaluation.` : "Homes older than 20 years are due for an inspection."}`,
-        },
-        {
-          q: `Do gutter contractors need a license in ${cityName}?`,
-          a: `Yes. ${stateName} requires contractors performing exterior improvements to carry a valid contractor's license and general liability insurance. All specialists connected through this page are licensed and insured in ${stateName}.`,
+          a: `Gutter installation in ${cityName} typically runs $600–$2,400 for a complete seamless system. A single-story home with 150 linear feet of seamless aluminum costs $700–$1,350; a two-story home with 200+ feet runs $1,400–$2,400+. Material upgrades to steel or copper cost more. A licensed ${cityName} specialist gives you a line-item quote based on your exact roofline measurements.`,
         },
         {
           q: `Are seamless gutters worth it in ${cityName}?`,
-          a: `Seamless gutters cost 10–20% more than sectional gutters upfront but eliminate seam joints — the primary source of leaks. For most ${cityName} homeowners, the reduced maintenance and longer lifespan make seamless gutters the better long-term value. A specialist can give you a side-by-side comparison.`,
+          a: `For most ${cityName} homeowners, yes. Seamless gutters cost 10–20% more than pre-cut sectional gutters but eliminate seam joints — the primary source of leaks. They last longer, require less maintenance, and look cleaner. The premium pays back in avoided repairs within 5–7 years for most homes.`,
+        },
+        {
+          q: `What size gutters does my ${cityName} home need?`,
+          a: `Most ${cityName} homes use 5-inch K-style gutters with 3×4-inch downspouts. Homes with steep roofs, large roof areas, or heavy rainfall exposure benefit from 6-inch gutters with 4-inch round downspouts for greater capacity. A licensed specialist calculates the right size based on your roof pitch and square footage.`,
+        },
+        {
+          q: `Is the gutter installation quote free in ${cityName}?`,
+          a: `Yes. A phone quote costs nothing — no inspection fee, no obligation. A licensed ${cityName} gutter specialist provides a written estimate based on your home's specific measurements before any work is scheduled.`,
+        },
+        {
+          q: `How long does gutter installation take in ${cityName}?`,
+          a: `Most full gutter installations in ${cityName} are completed in a single day. A standard single-story home takes 4–6 hours; a two-story home with a complex roofline may take a full 8-hour day. The installer removes old gutters (if applicable), assesses fascia condition, and fabricates and installs the new seamless gutters on-site.`,
         },
       ],
     },
     closing: {
       h2: `Get Your Free Gutter Installation Quote in ${cityName} Today`,
-      text: `No forms. No waiting. No obligation. A licensed gutter specialist serving ${cityName}, ${stateName} can give you an honest installation estimate in under 5 minutes.`,
-      cta: `Call for Your Free ${cityName} Gutter Quote`,
-      sub: `Call ${phone} · Available 7 days a week · Same-day quote in ${cityName}`,
+      text: `No forms. No waiting. No commitment. A licensed gutter installation specialist serving ${cityName}, ${stateName} gives you an honest, line-item estimate in under 5 minutes — and tells you exactly what your home's drainage system needs before any work is scheduled.`,
+      cta: `Call for Your Free ${cityName} Gutter Installation Quote`,
+      sub: `Call ${phone} · Available 7 days a week · Same-day quotes in ${cityName}`,
     },
     internalLinks: {
       otherServicesLabel: `Other gutter services in ${cityName}:`,

@@ -28,96 +28,122 @@ export interface MultiSelectConfig extends CalculatorConfig {
 
 export type CalculatorServiceConfig = SingleSelectConfig | MultiSelectConfig;
 
-const pestControlOptions: CalculatorOption[] = [
-  { label: "One-time treatment (general pests)", value: "onetime", min: 150, max: 400 },
-  { label: "Annual prevention program", value: "annual", min: 400, max: 900 },
-  { label: "Inspection only", value: "inspection", min: 75, max: 200 },
-  { label: "Severe infestation treatment", value: "severe", min: 400, max: 1200 },
+const gutterInstallationOptions: CalculatorOption[] = [
+  { label: "Single-story home (up to 150 lin ft)", value: "single_small", min: 600, max: 1200 },
+  { label: "Single-story home (150–200 lin ft)", value: "single_large", min: 900, max: 1600 },
+  { label: "Two-story home (up to 200 lin ft)", value: "two_medium", min: 1200, max: 2000 },
+  { label: "Two-story home (200+ lin ft, complex roofline)", value: "two_large", min: 1600, max: 2800 },
 ];
 
-const termiteSizeOptions: CalculatorOption[] = [
-  { label: "Under 1,500 sq ft", value: "small", min: 0, max: 0 },
-  { label: "1,500 – 3,000 sq ft", value: "medium", min: 0, max: 0 },
-  { label: "3,000+ sq ft", value: "large", min: 0, max: 0 },
+const gutterCleaningOptions: CalculatorOption[] = [
+  { label: "Single-story home", value: "single", min: 100, max: 175 },
+  { label: "Two-story home", value: "two", min: 150, max: 250 },
+  { label: "Three-story / large home", value: "three", min: 200, max: 350 },
 ];
 
-const termiteMethodOptions: CalculatorOption[] = [
-  { label: "Liquid barrier", value: "liquid", min: 0, max: 0 },
-  { label: "Bait system", value: "bait", min: 0, max: 0 },
-  { label: "Fumigation", value: "fumigation", min: 0, max: 0 },
+const gutterRepairOptions: CalculatorOption[] = [
+  { label: "Seam resealing (1–2 sections)", value: "seam_small", min: 75, max: 200 },
+  { label: "Seam resealing (multiple sections)", value: "seam_large", min: 150, max: 400 },
+  { label: "Hanger replacement (several)", value: "hanger", min: 100, max: 300 },
+  { label: "Sagging section realignment", value: "sag", min: 150, max: 400 },
+  { label: "End cap or mitre repair", value: "endcap", min: 75, max: 200 },
 ];
 
-const termiteRanges: Record<string, [number, number]> = {
-  "small|liquid": [500, 1500],
-  "small|bait": [800, 2000],
-  "small|fumigation": [1200, 2500],
-  "medium|liquid": [800, 2500],
-  "medium|bait": [1200, 3000],
-  "medium|fumigation": [2000, 4500],
-  "large|liquid": [1200, 4000],
-  "large|bait": [2000, 5000],
-  "large|fumigation": [3500, 8000],
+const gutterReplacementSizeOptions: CalculatorOption[] = [
+  { label: "Under 150 lin ft", value: "small", min: 0, max: 0 },
+  { label: "150 – 200 lin ft", value: "medium", min: 0, max: 0 },
+  { label: "200+ lin ft", value: "large", min: 0, max: 0 },
+];
+
+const gutterReplacementMaterialOptions: CalculatorOption[] = [
+  { label: "Seamless aluminum", value: "aluminum", min: 0, max: 0 },
+  { label: "Seamless steel", value: "steel", min: 0, max: 0 },
+  { label: "Copper", value: "copper", min: 0, max: 0 },
+];
+
+const gutterReplacementRanges: Record<string, [number, number]> = {
+  "small|aluminum": [600, 1200],
+  "small|steel": [900, 1600],
+  "small|copper": [2000, 3500],
+  "medium|aluminum": [800, 1600],
+  "medium|steel": [1200, 2200],
+  "medium|copper": [2800, 4500],
+  "large|aluminum": [1200, 2400],
+  "large|steel": [1800, 3200],
+  "large|copper": [4000, 7000],
 };
 
-const rodentOptions: CalculatorOption[] = [
-  { label: "Trapping only", value: "trapping", min: 150, max: 500 },
-  { label: "Exclusion (entry point sealing)", value: "exclusion", min: 500, max: 1500 },
-  { label: "Full exclusion + sanitization", value: "full", min: 1000, max: 2500 },
+const gutterGuardOptions: CalculatorOption[] = [
+  { label: "Screen or basic mesh (full home)", value: "screen", min: 150, max: 500 },
+  { label: "Reverse-curve (full home)", value: "reverse", min: 400, max: 1200 },
+  { label: "Micro-mesh (full home)", value: "micromesh", min: 700, max: 2000 },
+  { label: "Micro-mesh premium brand (full home)", value: "micromesh_premium", min: 1200, max: 2800 },
 ];
 
-const bedBugOptions: CalculatorOption[] = [
-  { label: "Chemical treatment (1–2 rooms)", value: "chemical_small", min: 300, max: 800 },
-  { label: "Chemical treatment (whole home)", value: "chemical_full", min: 800, max: 2000 },
-  { label: "Heat treatment (whole home)", value: "heat", min: 1500, max: 5000 },
-  { label: "Hybrid (heat + chemical)", value: "hybrid", min: 1200, max: 3500 },
+const downspoutRepairOptions: CalculatorOption[] = [
+  { label: "Unclog and flush (per downspout)", value: "unclog", min: 75, max: 150 },
+  { label: "Joint or section repair", value: "joint", min: 100, max: 200 },
+  { label: "Reroute / extension for proper discharge", value: "reroute", min: 150, max: 400 },
+  { label: "Underground drainage extension", value: "underground", min: 300, max: 800 },
 ];
 
-const mosquitoOptions: CalculatorOption[] = [
-  { label: "Single barrier spray treatment", value: "single", min: 50, max: 150 },
-  { label: "Seasonal program (6–8 treatments)", value: "seasonal", min: 300, max: 700 },
-  { label: "Full season program (10+ treatments)", value: "full_season", min: 600, max: 900 },
-  { label: "Automated misting system (install)", value: "misting", min: 1500, max: 5000 },
+const seamlessGutterOptions: CalculatorOption[] = [
+  { label: "Aluminum — single-story home", value: "alum_single", min: 600, max: 1200 },
+  { label: "Aluminum — two-story home", value: "alum_two", min: 1000, max: 2000 },
+  { label: "Steel — single-story home", value: "steel_single", min: 900, max: 1800 },
+  { label: "Steel — two-story home", value: "steel_two", min: 1400, max: 2800 },
+  { label: "Copper — any size", value: "copper", min: 2500, max: 7000 },
 ];
 
-const wildlifeOptions: CalculatorOption[] = [
-  { label: "Single animal removal", value: "single", min: 150, max: 500 },
-  { label: "Removal + exclusion", value: "exclusion", min: 500, max: 1500 },
-  { label: "Full exclusion + attic remediation", value: "full", min: 1000, max: 3000 },
+const gutterInspectionOptions: CalculatorOption[] = [
+  { label: "Visual inspection (included with cleaning)", value: "visual", min: 0, max: 0 },
+  { label: "Standalone inspection", value: "standalone", min: 0, max: 150 },
+  { label: "Full written report", value: "report", min: 75, max: 200 },
 ];
 
-export const CALCULATOR_CONFIG: Record<ServiceSlug, CalculatorServiceConfig> = {
-  "pest-control-quote": {
+export const CALCULATOR_CONFIG: Record<string, CalculatorServiceConfig> = {
+  "gutter-installation": {
     kind: "single",
-    label: "Type of service",
-    options: pestControlOptions,
-  },
-  "termite-treatment-quote": {
-    kind: "multi",
     label: "Home size",
-    options: termiteSizeOptions,
-    secondLabel: "Treatment method",
-    secondOptions: termiteMethodOptions,
-    ranges: termiteRanges,
+    options: gutterInstallationOptions,
   },
-  "rodent-control-quote": {
+  "gutter-cleaning": {
     kind: "single",
-    label: "Scope of work",
-    options: rodentOptions,
+    label: "Home size",
+    options: gutterCleaningOptions,
   },
-  "bed-bug-treatment-quote": {
+  "gutter-repair": {
     kind: "single",
-    label: "Treatment type",
-    options: bedBugOptions,
+    label: "Type of repair",
+    options: gutterRepairOptions,
   },
-  "mosquito-control-quote": {
-    kind: "single",
-    label: "Program type",
-    options: mosquitoOptions,
+  "gutter-replacement": {
+    kind: "multi",
+    label: "Gutter footage",
+    options: gutterReplacementSizeOptions,
+    secondLabel: "Material",
+    secondOptions: gutterReplacementMaterialOptions,
+    ranges: gutterReplacementRanges,
   },
-  "wildlife-removal-quote": {
+  "gutter-guard-installation": {
     kind: "single",
-    label: "Scope of work",
-    options: wildlifeOptions,
+    label: "Guard type",
+    options: gutterGuardOptions,
+  },
+  "downspout-repair": {
+    kind: "single",
+    label: "Type of repair",
+    options: downspoutRepairOptions,
+  },
+  "seamless-gutter": {
+    kind: "single",
+    label: "Material and home size",
+    options: seamlessGutterOptions,
+  },
+  "gutter-inspection": {
+    kind: "single",
+    label: "Inspection type",
+    options: gutterInspectionOptions,
   },
 };
 
