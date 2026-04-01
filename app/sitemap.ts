@@ -19,7 +19,11 @@ function getCityPriority(population: number | undefined): number {
 export default function sitemap(): MetadataRoute.Sitemap {
   const { SITE_BASE_URL } = getSiteConfigValues();
   const { SERVICE_SLUGS } = getServiceConstants();
-  const lastMod = new Date();
+  // Date fixe = date du dernier déploiement majeur de contenu.
+  // NE PAS utiliser new Date() — Google verrait tout comme "modifié aujourd'hui"
+  // à chaque rebuild, ce qui dilue le signal lastmod.
+  // Mettre à jour cette date uniquement lors d'une modification significative du contenu.
+  const lastMod = new Date("2026-04-01");
   const entries: MetadataRoute.Sitemap = [];
 
   // Homepage
