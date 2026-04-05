@@ -4,8 +4,8 @@ export const gutterConfig = {
   slug: "gutter",
   siteUrl: "https://usa-gutter-quote.com",
   siteName: "USA Gutter Quote",
-  phoneTel: "tel:+18553564443",
-  phoneDisplay: "(855) 356-4443",
+  phoneTel: "tel:+18335675929",
+  phoneDisplay: "(833) 567-5929",
   ga4Id: "G-FR9YV912ZP",
   services: [
     { slug: "gutter-installation", label: "Gutter Installation" },
