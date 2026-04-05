@@ -34,13 +34,9 @@ for (const [key, entry] of Object.entries(metadataMap)) {
   stateSlugToCities.get(stateSlug)!.push({ slug: citySlug, name: entry.city });
 }
 
-// Sort cities by population desc within each state
-Array.from(stateSlugToCities.entries()).forEach(([stateSlug, cities]) => {
-  cities.sort((a, b) => {
-    const pa = metadataMap[`${stateSlug}|${a.slug}`]?.population ?? 0;
-    const pb = metadataMap[`${stateSlug}|${b.slug}`]?.population ?? 0;
-    return pb - pa;
-  });
+// Sort cities alphabetically within each state
+Array.from(stateSlugToCities.entries()).forEach(([, cities]) => {
+  cities.sort((a, b) => a.name.localeCompare(b.name));
 });
 
 export const stateSlugs: string[] = Array.from(stateSlugToCities.keys()).sort();
