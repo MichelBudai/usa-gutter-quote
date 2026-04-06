@@ -62,6 +62,7 @@ export function getGutterCityPageContent(
   const homeValue = cityMetadata?.medianHomeValue;
   const growthSnippet = cityMetadata?.growthSnippet;
   const homeownershipRate = cityMetadata?.homeownershipRate;
+  const medianGrossRent = cityMetadata?.medianGrossRent;
 
   const introParagraphs: string[] = [
     `Get a free gutter installation quote in ${cityName}, ${stateName}. Licensed local specialists measure your roofline, recommend the right material and size for your home and local rainfall, and provide a line-item quote — no forms, no inspection fee, no obligation.`,
@@ -103,6 +104,11 @@ export function getGutterCityPageContent(
   if (growthSnippet) {
     localParagraphs.push(
       `As ${growthSnippet}, ${cityName}'s active construction and renovation market keeps licensed gutter contractors busy. Booking a quote early — especially for installation and full replacement — ensures you get the service window you need before the season peaks.`
+    );
+  }
+  if (homeownershipRate) {
+    localParagraphs.push(
+      `With a homeownership rate of ${homeownershipRate}% in ${cityName}, gutter installation is a common owner-driven investment — homeowners who maintain their drainage system protect their home's structure and long-term resale value.`
     );
   }
   if (!localParagraphs.length) {
@@ -151,7 +157,7 @@ export function getGutterCityPageContent(
       h2: `Why ${cityName} Homeowners Call for a Gutter Quote Before Buying Materials`,
       paragraphs: [
         `A 5-minute call to a licensed ${cityName} gutter specialist gets you a real installation budget — sized correctly for your roofline, your roof pitch, and ${stateName}'s rainfall conditions. The right gutter size prevents overflow during heavy rain; the wrong size is just an expensive decoration that fails when you need it most.${county ? ` Specialists in ${county} County know the local drainage grade requirements and can confirm your system will pass inspection.` : ""}`,
-        `It keeps you from overpaying or getting under-delivered. The most common gutter mistake in ${cityName} is hiring a contractor who uses undersized 4-inch gutters or incorrectly spaced hangers to cut costs. A licensed specialist explains exactly what hanger spacing, gutter size, and downspout count your home needs — so you can hold any contractor to the same standard.`,
+        `It keeps you from overpaying or getting under-delivered. The most common gutter mistake in ${cityName} is hiring a contractor who uses undersized 4-inch gutters or incorrectly spaced hangers to cut costs. A licensed specialist explains exactly what hanger spacing, gutter size, and downspout count your home needs — so you can hold any contractor to the same standard.${medianGrossRent ? ` In ${cityName}, where median rent is $${medianGrossRent.toLocaleString()}/month, rental property owners especially need properly installed gutters — water damage from failed drainage is one of the most common and costly habitability issues.` : ""}`,
         `Acting before a storm season starts saves money and guarantees availability. New gutters prevent the foundation oversaturation, fascia rot, and basement moisture that develop over multiple rain seasons without proper drainage. Waiting until visible damage forces the issue means paying for gutter installation AND the water damage repair — costs that stack quickly past $5,000.`,
       ],
     },

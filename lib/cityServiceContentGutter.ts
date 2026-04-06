@@ -94,6 +94,8 @@ function getGutterCleaningCityPageContent(params: ServiceContentParams): Service
   const medianYear = cityMetadata?.medianYearBuilt;
   const growthSnippet = cityMetadata?.growthSnippet;
   const homeownershipRate = cityMetadata?.homeownershipRate;
+  const medianHouseholdIncome = cityMetadata?.medianHouseholdIncome;
+  const totalHousingUnits = cityMetadata?.totalHousingUnits;
 
   const localParagraphs: string[] = [
     ...(county ? [`Gutter cleaning in ${county} is typically needed twice a year — fall after leaves drop and spring after seed pods and storm debris. Local specialists know seasonal timing for ${cityName}'s tree coverage and climate.`] : []),
@@ -158,6 +160,7 @@ function getGutterCleaningCityPageContent(params: ServiceContentParams): Service
         `Familiar with seasonal debris patterns in ${cityName}`,
         "Downspout flushing included with every cleaning",
         `Same-day and next-day availability in ${cityName}`,
+        ...(totalHousingUnits ? [`${cityName} has ${totalHousingUnits.toLocaleString()} housing units — local specialists serve this market regularly and can accommodate recurring cleaning schedules.`] : []),
       ], cityMetadata),
     },
     eeat: { title: "Why trust this guide", bullets: EEAT_BULLETS },
@@ -166,7 +169,7 @@ function getGutterCleaningCityPageContent(params: ServiceContentParams): Service
       items: [
         {
           q: `How much does gutter cleaning cost in ${cityName}, ${stateAbbr}?`,
-          a: `Gutter cleaning in ${cityName} typically runs $100–$250 for a single-story home and $150–$350 for a two-story home. A licensed specialist can give you an exact quote based on your home's size and debris level.`,
+          a: `Gutter cleaning in ${cityName} typically runs $100–$250 for a single-story home and $150–$350 for a two-story home.${medianHouseholdIncome ? ` For ${cityName} households with a median income of $${medianHouseholdIncome.toLocaleString()}, a $150 annual cleaning is one of the most cost-effective home maintenance investments — far less than the fascia and foundation repairs that follow years of neglect.` : ""} A licensed specialist can give you an exact quote based on your home's size and debris level.`,
         },
         {
           q: `How often should gutters be cleaned in ${cityName}?`,
@@ -207,12 +210,15 @@ function getGutterRepairCityPageContent(params: ServiceContentParams): ServiceCi
   const medianYear = cityMetadata?.medianYearBuilt;
   const growthSnippet = cityMetadata?.growthSnippet;
   const homeValue = cityMetadata?.medianHomeValue;
+  const homeownershipRate = cityMetadata?.homeownershipRate;
+  const medianGrossRent = cityMetadata?.medianGrossRent;
 
   const localParagraphs: string[] = [
     ...(county ? [`Gutter repair specialists in ${county} know the common failure points for ${cityName}'s housing stock and climate — sagging sections, leaking seams, and loose hangers are the most frequent issues.`] : []),
     ...(medianYear ? [`${cityName} homes built around ${medianYear} often have original gutters with failing sealant at seam joints and loose hangers from decades of freeze-thaw cycles. Early repair prevents full replacement.`] : []),
     ...(homeValue ? [`With a median home value of $${Number(homeValue).toLocaleString()} in ${cityName}, addressing gutter failures before they cause fascia rot or foundation damage protects a significant asset.`] : []),
     ...(growthSnippet ? [`${cityName} is ${growthSnippet}. Licensed repair specialists are in demand — getting a quote early helps you schedule before the problem worsens.`] : []),
+    ...(medianGrossRent ? [`In ${cityName}, where median rent is $${medianGrossRent.toLocaleString()}/month, landlords have a strong incentive to repair gutters promptly — water damage from leaking gutters can trigger habitability complaints and costly emergency repairs.`] : []),
   ].filter(Boolean);
   if (!localParagraphs.length) localParagraphs.push(`A licensed ${cityName} gutter repair specialist diagnoses the full system and gives you an itemized quote before any work begins.`);
 
@@ -258,7 +264,7 @@ function getGutterRepairCityPageContent(params: ServiceContentParams): ServiceCi
     whyCall: {
       h2: `Why ${cityName} Homeowners Fix Gutters Before Water Damage Spreads`,
       paragraphs: [
-        `A gutter repair quote from a licensed ${cityName} specialist takes under 5 minutes. You get a clear diagnosis — not just a patch — and a price before any work starts.`,
+        `A gutter repair quote from a licensed ${cityName} specialist takes under 5 minutes. You get a clear diagnosis — not just a patch — and a price before any work starts.${homeownershipRate ? ` With ${homeownershipRate}% homeownership in ${cityName}, most residents have a direct financial stake in maintaining gutters that protect their home's structure and long-term value.` : ""}`,
         `Leaking gutters deposit water directly against your foundation and siding. Left untreated, a $150 seam repair becomes a $3,000 fascia replacement or a $10,000+ foundation waterproofing project. Getting a repair quote is the lowest-cost action available.`,
         `A thorough diagnosis catches multiple failure points in a single visit. Many ${cityName} homeowners discover that a gutter they thought needed one repair actually has three or four issues — catching them all at once prevents repeat service calls and the cumulative water damage between visits.`,
       ],
@@ -320,12 +326,15 @@ function getGutterReplacementCityPageContent(params: ServiceContentParams): Serv
   const medianYear = cityMetadata?.medianYearBuilt;
   const homeValue = cityMetadata?.medianHomeValue;
   const growthSnippet = cityMetadata?.growthSnippet;
+  const homeownershipRate = cityMetadata?.homeownershipRate;
+  const totalHousingUnits = cityMetadata?.totalHousingUnits;
 
   const localParagraphs: string[] = [
     ...(county ? [`Full gutter replacement in ${county} is a one-day project for most homes. Specialists remove the old system, assess fascia condition, and install seamless aluminum custom-rolled on-site to your exact measurements.`] : []),
     ...(medianYear ? [`${cityName} homes built around ${medianYear} commonly have original gutters at or past their 20-year lifespan. Widespread seam failures and rust throughout the system indicate replacement is the more cost-effective option versus repeated repairs.`] : []),
     ...(homeValue ? [`With a median home value of $${Number(homeValue).toLocaleString()} in ${cityName}, a full gutter replacement protects long-term equity. New seamless gutters also improve curb appeal and can be a selling point.`] : []),
     ...(growthSnippet ? [`${cityName} is ${growthSnippet}. New construction and renovation activity means gutter specialists are busy — getting a replacement quote early helps you secure your installation window.`] : []),
+    ...(homeownershipRate ? [`With a homeownership rate of ${homeownershipRate}% in ${cityName}, gutter replacement is a common owner-driven investment — new seamless gutters deliver 20–30 years of maintenance-free drainage and immediate curb appeal improvement.`] : []),
   ].filter(Boolean);
   if (!localParagraphs.length) localParagraphs.push(`A licensed ${cityName} gutter replacement specialist measures your roofline, assesses fascia condition, and provides a full line-item quote before any work begins.`);
 
@@ -385,6 +394,7 @@ function getGutterReplacementCityPageContent(params: ServiceContentParams): Serv
         `Seamless gutters custom-rolled on-site to your roofline`,
         "Full removal of existing system included",
         `Most ${cityName} replacements completed in a single day`,
+        ...(totalHousingUnits ? [`${cityName} has ${totalHousingUnits.toLocaleString()} housing units — local specialists are experienced with the roofline profiles and gutter styles common across this market.`] : []),
       ], cityMetadata),
     },
     eeat: { title: "Why trust this guide", bullets: EEAT_BULLETS },
@@ -434,6 +444,8 @@ function getGutterGuardCityPageContent(params: ServiceContentParams): ServiceCit
   const medianYear = cityMetadata?.medianYearBuilt;
   const growthSnippet = cityMetadata?.growthSnippet;
   const homeownershipRate = cityMetadata?.homeownershipRate;
+  const medianHouseholdIncome = cityMetadata?.medianHouseholdIncome;
+  const totalHousingUnits = cityMetadata?.totalHousingUnits;
 
   const localParagraphs: string[] = [
     ...(county ? [`Gutter guard specialists in ${county} recommend product types based on your specific tree coverage — micro-mesh performs best under heavy pine and oak; reverse-curve works well in areas with mostly leaf debris.`] : []),
@@ -486,7 +498,7 @@ function getGutterGuardCityPageContent(params: ServiceContentParams): ServiceCit
       h2: `Why ${cityName} Homeowners Invest in Gutter Guards`,
       paragraphs: [
         `A gutter guard quote from a licensed ${cityName} specialist includes a product recommendation based on your actual tree coverage and debris type. Buying the wrong guard type — a common outcome of online purchases — results in a system that still clogs and still needs cleaning.`,
-        `The math is straightforward for most ${cityName} homeowners. If you pay $150–$200 for cleaning twice a year, a $1,200 guard installation pays for itself in 4–5 years — and eliminates the safety risk of ladder work at height.`,
+        `The math is straightforward for most ${cityName} homeowners. If you pay $150–$200 for cleaning twice a year, a $1,200 guard installation pays for itself in 4–5 years — and eliminates the safety risk of ladder work at height.${medianHouseholdIncome ? ` For ${cityName} households with a median income of $${medianHouseholdIncome.toLocaleString()}, this is a predictable one-time cost that replaces recurring annual expense.` : ""}`,
         `Quality guards come with 10–25 year manufacturer warranties. A licensed installer provides documentation and handles warranty claims. DIY installations typically void manufacturer coverage and often lead to improper fitment that gaps under wind and debris loads.`,
       ],
     },
@@ -498,6 +510,7 @@ function getGutterGuardCityPageContent(params: ServiceContentParams): ServiceCit
         `Product recommendation based on your specific tree coverage`,
         "Manufacturer warranty provided with installation",
         `Most ${cityName} guard installations completed in a single day`,
+        ...(totalHousingUnits ? [`${cityName}'s ${totalHousingUnits.toLocaleString()} housing units represent a large installed base — local specialists stock the most common guard types for quick installation.`] : []),
       ], cityMetadata),
     },
     eeat: { title: "Why trust this guide", bullets: EEAT_BULLETS },
@@ -547,12 +560,15 @@ function getDownspoutRepairCityPageContent(params: ServiceContentParams): Servic
   const medianYear = cityMetadata?.medianYearBuilt;
   const homeValue = cityMetadata?.medianHomeValue;
   const growthSnippet = cityMetadata?.growthSnippet;
+  const homeownershipRate = cityMetadata?.homeownershipRate;
+  const medianGrossRent = cityMetadata?.medianGrossRent;
 
   const localParagraphs: string[] = [
     ...(county ? [`Downspout repair specialists in ${county} assess discharge routing to ensure water exits at least 4 feet from your foundation — a common deficiency in older ${cityName} homes.`] : []),
     ...(medianYear ? [`Homes built around ${medianYear} in ${cityName} often have original downspouts with crimped joints and inadequate splash blocks. Rerouting or extending discharge is a common repair that prevents foundation saturation.`] : []),
     ...(homeValue ? [`With a median home value of $${Number(homeValue).toLocaleString()} in ${cityName}, ensuring downspouts discharge properly away from the foundation protects one of your most valuable assets from preventable water damage.`] : []),
     ...(growthSnippet ? [`${cityName} is ${growthSnippet}. Properly functioning downspouts are essential in growing areas where landscaping and hardscape changes can redirect water toward structures.`] : []),
+    ...(medianGrossRent ? [`In ${cityName}, where median rent is $${medianGrossRent.toLocaleString()}/month, rental property owners especially need properly functioning downspouts — improper discharge that causes foundation moisture can create habitability issues and lead to costly emergency waterproofing work.`] : []),
   ].filter(Boolean);
   if (!localParagraphs.length) localParagraphs.push(`A licensed ${cityName} downspout specialist assesses your discharge points and routing, and gives you an upfront repair quote.`);
 
@@ -573,7 +589,9 @@ function getDownspoutRepairCityPageContent(params: ServiceContentParams): Servic
         `Downspout problems in ${cityName} homes include clogged sections, separated joints, crimped elbows, and discharge points that deposit water too close to the foundation. Each issue directs water where it causes the most damage.`,
         county
           ? `Licensed downspout repair specialists in ${county} assess the complete drainage path — from gutter inlet to discharge point — before quoting.`
-          : `A licensed ${cityName} specialist can assess your downspout issues and give you a repair estimate over the phone.`,
+          : homeownershipRate
+            ? `With ${homeownershipRate}% homeownership in ${cityName}, most residents own the drainage system and are responsible for ensuring downspouts discharge properly away from the foundation — a $150 fix that prevents thousands in foundation repair.`
+            : `A licensed ${cityName} specialist can assess your downspout issues and give you a repair estimate over the phone.`,
       ],
       cta: `Call for a Free ${cityName} Downspout Repair Quote`,
     },
@@ -660,6 +678,8 @@ function getSeamlessGutterCityPageContent(params: ServiceContentParams): Service
   const medianYear = cityMetadata?.medianYearBuilt;
   const homeValue = cityMetadata?.medianHomeValue;
   const growthSnippet = cityMetadata?.growthSnippet;
+  const homeownershipRate = cityMetadata?.homeownershipRate;
+  const medianHouseholdIncome = cityMetadata?.medianHouseholdIncome;
 
   const localParagraphs: string[] = [
     ...(county ? [`Seamless gutter specialists in ${county} roll gutters on-site from a continuous aluminum coil to your exact roofline measurements — eliminating seam joints and ensuring proper pitch in a single installation visit.`] : []),
@@ -712,7 +732,7 @@ function getSeamlessGutterCityPageContent(params: ServiceContentParams): Service
     whyCall: {
       h2: `Why ${cityName} Homeowners Choose Seamless Over Sectional Gutters`,
       paragraphs: [
-        `A seamless gutter quote from a licensed ${cityName} specialist includes a side-by-side comparison with sectional gutters. For most homeowners, seamless wins on long-term cost — no sealant to re-apply, no joint leaks to repair, and a longer effective lifespan.`,
+        `A seamless gutter quote from a licensed ${cityName} specialist includes a side-by-side comparison with sectional gutters. For most homeowners, seamless wins on long-term cost — no sealant to re-apply, no joint leaks to repair, and a longer effective lifespan.${homeownershipRate ? ` With ${homeownershipRate}% homeownership in ${cityName}, seamless gutters are a particularly smart investment — owners who plan to stay in their home capture the full 20–30 year lifespan of a properly installed system.` : ""}`,
         `Seam joints are where 90% of gutter leaks originate. Pre-cut sectional gutters sold at home improvement stores have joints every 10–12 feet. A 150-foot home has 12–15 seam joints that all require periodic resealing and will eventually fail. Seamless eliminates every one of them.`,
         `Seamless gutters are fabricated and installed in a single visit by a licensed contractor with a rolling machine. The job is done right, with proper pitch and hanger spacing, in a day. There's no DIY equivalent for seamless gutters — the equipment costs $15,000+.`,
       ],
@@ -733,7 +753,7 @@ function getSeamlessGutterCityPageContent(params: ServiceContentParams): Service
       items: [
         {
           q: `How much do seamless gutters cost in ${cityName}, ${stateAbbr}?`,
-          a: `Seamless aluminum gutters in ${cityName} typically run $4–$9 per linear foot installed, or $700–$1,800 for a typical home. Seamless copper runs $15–$30 per linear foot. A licensed specialist gives you exact pricing based on your home's measurements.`,
+          a: `Seamless aluminum gutters in ${cityName} typically run $4–$9 per linear foot installed, or $700–$1,800 for a typical home. Seamless copper runs $15–$30 per linear foot.${medianHouseholdIncome ? ` For ${cityName} households with a median income of $${medianHouseholdIncome.toLocaleString()}, a $1,000–$1,500 seamless installation that eliminates $300–$400 in annual cleaning and repair costs is a clear financial decision.` : ""} A licensed specialist gives you exact pricing based on your home's measurements.`,
         },
         {
           q: `Are seamless gutters better than sectional in ${cityName}?`,
@@ -774,12 +794,15 @@ function getGutterInspectionCityPageContent(params: ServiceContentParams): Servi
   const medianYear = cityMetadata?.medianYearBuilt;
   const homeValue = cityMetadata?.medianHomeValue;
   const growthSnippet = cityMetadata?.growthSnippet;
+  const medianHouseholdIncome = cityMetadata?.medianHouseholdIncome;
+  const totalHousingUnits = cityMetadata?.totalHousingUnits;
 
   const localParagraphs: string[] = [
     ...(county ? [`Gutter inspection specialists in ${county} check pitch, hanger spacing, seam integrity, downspout routing, and fascia condition — a complete assessment of your drainage system in a single visit.`] : []),
     ...(medianYear ? [`${cityName} homes built around ${medianYear} are at or approaching the typical gutter replacement threshold. An inspection determines whether repair or replacement is the more cost-effective path.`] : []),
     ...(homeValue ? [`With a median home value of $${Number(homeValue).toLocaleString()} in ${cityName}, a gutter inspection before purchasing or selling a home identifies drainage issues that affect value and negotiation.`] : []),
     ...(growthSnippet ? [`${cityName} is ${growthSnippet}. Home inspections and pre-purchase gutter assessments are increasingly common as the market grows.`] : []),
+    ...(medianHouseholdIncome ? [`For ${cityName} homeowners with a median household income of $${medianHouseholdIncome.toLocaleString()}, a free or $75–$150 gutter inspection is the lowest-cost way to know whether your system is protecting your home — or silently causing water damage.`] : []),
   ].filter(Boolean);
   if (!localParagraphs.length) localParagraphs.push(`A licensed ${cityName} gutter inspector assesses your complete drainage system and provides a written condition report with repair or replacement recommendations.`);
 
@@ -838,6 +861,7 @@ function getGutterInspectionCityPageContent(params: ServiceContentParams): Servi
         "Written condition report with specific recommendations",
         "Often included free with cleaning or repair estimate",
         `Same-day and next-day availability in ${cityName}`,
+        ...(totalHousingUnits ? [`${cityName} has ${totalHousingUnits.toLocaleString()} housing units — local specialists are experienced with the gutter systems and roofline profiles common across this market.`] : []),
       ], cityMetadata),
     },
     eeat: { title: "Why trust this guide", bullets: EEAT_BULLETS },
