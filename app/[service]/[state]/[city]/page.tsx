@@ -532,22 +532,22 @@ export default function CityPage({
           <p className={styles.sectionIntro} style={{ marginBottom: "0.5rem" }}>
             {nearby.length > 0 ? (
               <>
-                <Link href={`/${service}/${stateSlug}/${nearby[0].slug}`}>
-                  {label} in {nearby[0].name}, {stateAbbr}
+                <Link href={`/${service}/${nearby[0].stateSlug}/${nearby[0].slug}`}>
+                  {label} in {nearby[0].name}, {nearby[0].stateSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                 </Link>
                 {nearby[1] && (
                   <>
                     {" · "}
-                    <Link href={`/${service}/${stateSlug}/${nearby[1].slug}`}>
-                      {label} in {nearby[1].name}, {stateAbbr}
+                    <Link href={`/${service}/${nearby[1].stateSlug}/${nearby[1].slug}`}>
+                      {label} in {nearby[1].name}, {nearby[1].stateSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                     </Link>
                   </>
                 )}
                 {nearby[2] && (
                   <>
                     {" · "}
-                    <Link href={`/${service}/${stateSlug}/${nearby[2].slug}`}>
-                      {label} in {nearby[2].name}, {stateAbbr}
+                    <Link href={`/${service}/${nearby[2].stateSlug}/${nearby[2].slug}`}>
+                      {label} in {nearby[2].name}, {nearby[2].stateSlug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase())}
                     </Link>
                   </>
                 )}

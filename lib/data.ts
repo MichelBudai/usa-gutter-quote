@@ -75,22 +75,22 @@ export function getNearbyCities(
   stateSlug: string,
   currentCitySlug: string,
   count: number = 3
-): { slug: string; name: string }[] {
+): { slug: string; name: string; stateSlug: string }[] {
   const entry = metadataMap[`${stateSlug}|${currentCitySlug}`];
   if (entry?.nearbyCities?.length) {
     return entry.nearbyCities
       .slice(0, count)
       .filter((n) => n.slug !== currentCitySlug)
-      .map((n) => ({ slug: n.slug, name: n.city }));
+      .map((n) => ({ slug: n.slug, name: n.city, stateSlug: n.stateSlug ?? stateSlug }));
   }
   // Fallback
   const cities = getCitiesForState(stateSlug);
   const idx = cities.findIndex((c) => c.slug === currentCitySlug);
   if (idx < 0) return [];
-  const out: { slug: string; name: string }[] = [];
+  const out: { slug: string; name: string; stateSlug: string }[] = [];
   for (let i = 1; i <= count; i++) {
     const next = cities[(idx + i) % cities.length];
-    if (next && next.slug !== currentCitySlug) out.push(next);
+    if (next && next.slug !== currentCitySlug) out.push({ ...next, stateSlug });
   }
   return out;
 }
